@@ -9,4 +9,4 @@ read -r homework
 
 printf "# vim: set syntax=python :\n" >"$directory/homework/$homework.log"
 
-find -P "$directory" -type f -not -path "*/.*" -not -path "$directory/admin*" -not -path "$directory/homework*" -not -path '*/tutor' -not -path '*/tutor.cs*' -not -path '*/TEST*' -exec sh -c 'f="{}"; d="'"$directory"'"; f=${f#$d/}; if file -b "{}" | grep -q text; then printf "Processing %s\n" "$f"; cat "{}"; printf "\n"; fi' \; >>"$directory/homework/$homework.log"
+find -P "$directory" -type f -not -path "*/.*" -not -path "$directory/admin*" -not -path "$directory/homework*" -not -path '*/tutor' -not -path '*/tutor.cs*' -not -path '*/TEST*' -exec sh -c 'f="$1"; d="'"$directory"'"; f=${f#$d/}; if file -b "$1" | grep -q text; then printf "Processing %s\n" "$f"; cat "$1"; printf "\n"; fi' {} \; >>"$directory/homework/$homework.log"
