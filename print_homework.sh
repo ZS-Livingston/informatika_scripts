@@ -9,4 +9,19 @@ read -r homework
 
 printf "# vim: set syntax=python :\n" >"$directory/homework/$homework.log"
 
-find -P "$directory" -type f -not -path "*/.*" -not -path "$directory/admin*" -not -path "$directory/homework*" -not -path '*/tutor' -not -path '*/tutor.cs*' -not -path '*/TEST*' -exec sh -c 'f="$1"; d="'"$directory"'"; f=${f#$d/}; fileName=$(basename "$f"); fileType=$(file -b "$1"); if echo "$fileType" | grep -q text; then if [ ! -f "$d/homework/$fileName" ]; then printf "Processing %s\n" "$f"; cat "$1"; printf "\n"; fi; fi' _ {} \; >>"$directory/homework/$homework.log"
+# Store the result of find command into an array
+mapfile -t files < <(find -P "$directory" -type f -not -path "*/.*" -not -path "$directory/admin*" -not -path "$directory/homework*" -not -path '*/tutor' -not -path '*/tutor.cs*' -not -path '*/TEST*')
+
+# Process each file
+for f in "${files[@]}"; do
+    f=${f#$directory/}
+    fileName=$(basename "$f")
+    fileType=$(file -b "$directory/$f")
+    if echo "$fileType" | grep -q text; then
+        if [ ! -f "$directory/homework/$fileName" ]; then
+            printf "Processing %s\n" "$f"
+            cat "$directory/$f"
+            printf "\n"
+        fi
+    fi
+done >>"$directory/homework/$homework.log"
