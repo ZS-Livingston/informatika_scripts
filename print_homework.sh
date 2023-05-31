@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-printf "Please enter the absolute path of homework directory "
+printf "Please enter the absolute path of class directory "
 read -r directory
 mkdir -p "$directory/homework"
 
